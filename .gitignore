@@ -1,0 +1,38 @@
+# Local state (never distribute)
+boulder.json
+handoff.md
+settings.local.json
+stats-cache.json
+history.jsonl
+
+# Session data
+transcripts/
+tasks/
+sessions/
+session-env/
+shell-snapshots/
+cache/
+ide/
+
+# User data
+plans/
+notepads/
+drafts/
+downloads/
+backups/
+debug/
+file-history/
+paste-cache/
+todos/
+plugins/
+projects/
+statsig/
+telemetry/
+tools/
+bin/
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/

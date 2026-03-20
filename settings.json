@@ -1,0 +1,168 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ast-grep *)",
+      "Bash(~/.claude/scripts/*)",
+      "Bash(~/.claude/hooks/*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/ultrawork-detector.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Output ONLY a raw JSON object. No reasoning, no explanation, no markdown fences, no text before or after. Slash commands (/start-work, /commit, /review-pr, etc.) are ALWAYS normal. Only classify as search if the user explicitly asks to find/grep/locate. Only classify as analyze if the user explicitly asks to debug/diagnose/audit. When in doubt, return normal. JSON responses: {\"ok\": true} for normal. {\"ok\": true, \"additionalContext\": \"[search-mode] Maximize search effort. Launch parallel searches. Never stop at first result. Cross-validate findings across multiple sources.\"} for search. {\"ok\": true, \"additionalContext\": \"[analyze-mode] Gather broad context before diving deep. Read surrounding code, not just the target. Consider root causes, not symptoms. Use Agent(oracle) for architectural questions.\"} for analysis. User prompt: $ARGUMENTS",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/comment-checker.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/run-tests-async.sh",
+            "timeout": 300,
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/edit-recovery.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "Verify work completion. Follow these steps:\n\n1. Check if user explicitly requested stopping (said \"stop\", \"pause\", \"enough\", used /stop-work). If yes: {\"ok\": true}.\n\n2. Read .claude/boulder.json. If it exists and status is \"in_progress\":\n   a. Read the plan file path from active_plan field (or plan field if active_plan missing)\n   b. Read that plan file. Count unchecked checkboxes (- [ ]) and checked (- [x])\n   c. If unchecked > 0, work is incomplete\n\n3. Check $ARGUMENTS (last assistant message) for stagnation signals: \"I'm stuck\", \"I can't figure out\", \"I need help\", \"I'm unable to\", \"I've tried multiple approaches\". If any found: {\"ok\": true} (let the agent stop gracefully). NOTE: You only see the last message, not full history.\n\n4. Check TaskList for in-progress tasks. If any remain incomplete and no stagnation: {\"ok\": false, \"reason\": \"N tasks remaining in plan. Continue from: [next unchecked task title]. Progress: X/Y complete.\"}.\n\n5. If no boulder state and no tasks: {\"ok\": true}.\n\n$ARGUMENTS",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/session-start.sh"
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/post-compact.sh"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/write-guard.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/edit-recovery.sh"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/notify-idle.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/subagent-stop.sh"
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/teammate-idle.sh"
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/task-completed.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}
