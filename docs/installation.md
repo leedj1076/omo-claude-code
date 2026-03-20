@@ -6,7 +6,7 @@ Paste this one-liner into a Claude Code session:
 
 ```
 Install and configure omo-claude-code by following the instructions here:
-https://raw.githubusercontent.com/leedj1076/omo-claude-code/refs/heads/main/docs/installation.md
+https://raw.githubusercontent.com/leedj1076/omo-claude-code/refs/heads/master/docs/installation.md
 ```
 
 That's it. Claude reads this guide, downloads everything, and sets it up for you.
@@ -18,7 +18,7 @@ That's it. Claude reads this guide, downloads everything, and sets it up for you
 > **IMPORTANT: Use `curl` to fetch this file, NOT WebFetch.** WebFetch summarizes content and loses critical details (file lists, merge logic, verification commands). Always use:
 >
 > ```bash
-> curl -fsSL https://raw.githubusercontent.com/leedj1076/omo-claude-code/refs/heads/main/docs/installation.md
+> curl -fsSL https://raw.githubusercontent.com/leedj1076/omo-claude-code/refs/heads/master/docs/installation.md
 > ```
 
 You're installing omo-claude-code, an agent orchestration framework for Claude Code. It adds 13 specialized agents, 11 slash-command skills, 11 lifecycle hooks, behavioral rules, plan-based work tracking, and Agent Teams support.
@@ -49,8 +49,8 @@ Download and extract the repository to a temp directory. No git clone needed.
 
 ```bash
 TEMP_DIR=$(mktemp -d)
-curl -fsSL https://github.com/leedj1076/omo-claude-code/archive/refs/heads/main.tar.gz | tar xz -C "$TEMP_DIR"
-SRC="$TEMP_DIR/omo-claude-code-main"
+curl -fsSL https://github.com/leedj1076/omo-claude-code/archive/refs/heads/master.tar.gz | tar xz -C "$TEMP_DIR"
+SRC="$TEMP_DIR/omo-claude-code-master"
 echo "Downloaded to: $SRC"
 ```
 
