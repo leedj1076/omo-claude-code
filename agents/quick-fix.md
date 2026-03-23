@@ -7,6 +7,7 @@ description: >-
   complex than expected, says so and suggests a more capable agent.
 tools: [Read, Edit, Glob, Grep]
 model: haiku
+effort: low
 maxTurns: 10
 ---
 

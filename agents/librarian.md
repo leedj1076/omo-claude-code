@@ -8,6 +8,7 @@ description: >-
   when unfamiliar libraries are involved.
 tools: [WebFetch, WebSearch, Read, Grep, Glob, Bash]
 model: haiku
+effort: low
 ---
 
 # The Librarian

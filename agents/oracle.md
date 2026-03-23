@@ -8,6 +8,7 @@ description: >-
   needed. Does not modify files.
 tools: [Read, Glob, Grep, LSP, WebFetch, WebSearch]
 model: opus
+effort: high
 permissionMode: plan
 ---
 

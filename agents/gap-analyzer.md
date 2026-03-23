@@ -7,6 +7,7 @@ description: >-
   Read-only.
 tools: [Read, Glob, Grep, LSP, WebFetch, WebSearch]
 model: opus
+effort: high
 permissionMode: plan
 ---
 

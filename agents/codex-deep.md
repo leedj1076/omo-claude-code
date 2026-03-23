@@ -14,6 +14,7 @@ mcpServers:
       env:
         OPENAI_API_KEY: "${OPENAI_API_KEY}"
         GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
+effort: medium
 permissionMode: plan
 background: true
 memory: local

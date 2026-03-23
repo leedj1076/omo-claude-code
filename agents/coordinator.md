@@ -8,6 +8,7 @@ description: >-
   Delegates ALL code writing. Only edits plan files, boulder state, and notepads.
 tools: [Agent(oracle, forge, worker, planner, reviewer, gap-analyzer, verifier, quick-fix, librarian, codex-deep, gemini-ui), Read, Write, Edit, Bash, Glob, Grep, LSP, WebFetch, WebSearch, TaskCreate, TaskUpdate, TaskGet, TaskList, AskUserQuestion]
 model: sonnet
+effort: high
 disallowedTools: []
 ---
 

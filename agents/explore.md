@@ -6,6 +6,7 @@ description: >-
   analyzes intent, cross-references findings, reports negatives.
 tools: [Read, Glob, Grep, LSP, Bash]
 model: haiku
+effort: low
 maxTurns: 15
 ---
 

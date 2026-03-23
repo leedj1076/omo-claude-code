@@ -7,6 +7,7 @@ description: >-
   code — only markdown plans. Use before starting complex features or refactors.
 tools: [Read, Write, Edit, Glob, Grep, LSP, WebFetch, WebSearch, AskUserQuestion, Agent(gap-analyzer, reviewer, explore, librarian)]
 model: opus
+effort: high
 memory: project
 ---
 

@@ -7,6 +7,7 @@ description: >-
   existing patterns. Does not delegate further.
 tools: [Read, Write, Edit, Bash, Glob, Grep, LSP, WebFetch, WebSearch]
 model: sonnet
+effort: medium
 maxTurns: 50
 ---
 

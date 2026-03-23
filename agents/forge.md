@@ -8,6 +8,8 @@ description: >-
   to other agents.
 tools: [Read, Write, Edit, Bash, Glob, Grep, LSP, WebFetch, WebSearch, TaskCreate, TaskUpdate, TaskGet, TaskList]
 model: opus
+effort: high
+isolation: worktree
 maxTurns: 100
 memory: project
 ---

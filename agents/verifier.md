@@ -7,6 +7,7 @@ description: >-
   execution after implementation tasks.
 tools: [Bash, Read, Glob, Grep, LSP]
 model: sonnet
+effort: medium
 background: true
 ---
 

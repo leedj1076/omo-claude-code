@@ -7,6 +7,7 @@ description: >-
   Blocker-finder, not perfectionist.
 tools: [Read, Glob, Grep, LSP]
 model: opus
+effort: high
 permissionMode: plan
 ---
 

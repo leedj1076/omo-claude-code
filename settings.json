@@ -36,15 +36,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/comment-checker.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
             "command": "~/.claude/hooks/run-tests-async.sh",
             "timeout": 300,
             "async": true
@@ -94,11 +85,29 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/comment-checker.sh"
+          }
+        ]
+      },
+      {
         "matcher": "Write",
         "hooks": [
           {
             "type": "command",
             "command": "~/.claude/hooks/write-guard.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); cmd=$(echo \"$input\" | jq -r '.command // empty'); if echo \"$cmd\" | grep -qE '\\brm\\s+-[a-zA-Z]*r[a-zA-Z]*f|\\bgit\\s+push\\s+(-f|--force)|\\bgit\\s+reset\\s+--hard|\\bgit\\s+clean\\s+-[a-zA-Z]*f|\\bgit\\s+push\\s+[^ ]*\\s+(main|master)\\b'; then echo 'BLOCKED: Destructive command. Use trash, git stash, or feature branches instead.' >&2; exit 2; fi"
           }
         ]
       }
@@ -163,6 +172,7 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "ENABLE_TOOL_SEARCH": "true"
   }
 }
