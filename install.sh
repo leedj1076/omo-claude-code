@@ -137,13 +137,31 @@ if [ -d "$SCRIPT_DIR/scripts" ]; then
   fi
 fi
 
-# --- API key warnings ---
+# --- Copy MCP tools ---
 
-if [ -z "${OPENAI_API_KEY:-}" ]; then
-  warn "OPENAI_API_KEY not set - scripts/ask-gpt.sh and agents/codex-deep.md won't work without it"
+if [ -d "$SCRIPT_DIR/tools" ]; then
+  copy_dir "$SCRIPT_DIR/tools" "$TARGET/tools"
+  log "Copied MCP tools"
 fi
-if [ -z "${GOOGLE_API_KEY:-}" ]; then
-  warn "GOOGLE_API_KEY not set - scripts/ask-gemini.sh and agents/gemini-ui.md won't work without it"
+
+# --- CLI auth checks ---
+
+if ! command -v codex &>/dev/null; then
+  warn "Codex CLI not found - codex-deep agent needs it for GPT access (OAuth). Install: npm i -g @openai/codex"
+  if [ -z "${OPENAI_API_KEY:-}" ]; then
+    warn "  OPENAI_API_KEY also not set - GPT access won't work at all"
+  else
+    log "  OPENAI_API_KEY is set - will use API fallback"
+  fi
+fi
+
+if ! command -v gemini &>/dev/null; then
+  warn "Gemini CLI not found - gemini-ui agent needs it for Gemini access (OAuth). Install: npm i -g @anthropic-ai/gemini-cli"
+  if [ -z "${GOOGLE_API_KEY:-}" ]; then
+    warn "  GOOGLE_API_KEY also not set - Gemini access won't work at all"
+  else
+    log "  GOOGLE_API_KEY is set - will use API fallback"
+  fi
 fi
 
 # --- Copy core files ---

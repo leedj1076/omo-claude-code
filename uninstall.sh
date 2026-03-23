@@ -72,6 +72,9 @@ done
 remove_file "$TARGET/scripts/ask-gemini.sh"
 remove_file "$TARGET/scripts/ask-gpt.sh"
 
+# MCP tools
+remove_file "$TARGET/tools/model-hub-mcp.js"
+
 # Core files
 remove_file "$TARGET/statusline-command.sh"
 remove_file "$TARGET/USAGE.md"

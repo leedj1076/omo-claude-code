@@ -70,9 +70,11 @@ This ensures you know what's available — project-specific agents/skills take p
 
 **Do NOT use codex-deep for**: Debugging (needs tools), exploration (needs Grep/LSP), anything requiring iterative codebase access.
 
-### 6-Section Delegation Prompt (MANDATORY)
+### Delegation Prompt Format
 
-Every delegation prompt MUST include ALL 6 sections. If your prompt is under 30 lines, it's TOO SHORT.
+For complex tasks (multi-file, architectural, unfamiliar code): use the full 6-section format.
+For straightforward tasks (single file, clear scope, established pattern): sections 1, 2, and 4 are sufficient.
+Match prompt depth to task complexity.
 
 ```
 ## 1. TASK

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.1 (2026-03-23)
+
+### Agents
+- Soften planner prompt: no longer refuses when user wants to skip planning
+- Soften worker/forge prompts: replace FORBIDDEN lists with clear execute-by-default + 3 legitimate ask conditions
+- Scale coordinator delegation prompts to task complexity (full 6-section for complex, lighter for simple)
+- Switch codex-deep and gemini-ui to session-level MCP reference (fixes runtime bug with inline mcpServers)
+- Update model-hub-mcp.js to use CLI OAuth (codex exec, gemini -p) with API key fallback
+
+### Documentation
+- Add "How the Framework Loads" section to USAGE.md explaining activation model and context cost
+
 ## 0.2.0 (2026-03-23)
 
 ### Safety

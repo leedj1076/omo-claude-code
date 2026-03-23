@@ -28,8 +28,11 @@ plugins/
 projects/
 statsig/
 telemetry/
-tools/
 bin/
+
+# tools/ is gitignored in live ~/.claude but we ship model-hub-mcp.js in the repo
+!tools/
+!tools/model-hub-mcp.js
 
 # macOS
 .DS_Store

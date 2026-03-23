@@ -7,13 +7,7 @@ description: >-
   Returns synthesized design recommendations. Read-only.
 tools: [Read, Glob, Grep]
 mcpServers:
-  - modelhub:
-      type: stdio
-      command: node
-      args: ["~/.claude/tools/model-hub-mcp.js"]
-      env:
-        OPENAI_API_KEY: "${OPENAI_API_KEY}"
-        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
+  - modelhub
 effort: medium
 permissionMode: plan
 background: true

@@ -6,6 +6,37 @@ This setup has two layers: **skills** (slash commands you invoke) and **agents**
 
 ---
 
+## How the Framework Loads
+
+Not everything runs on every session. Most of the framework is dormant until you invoke it.
+
+**Loads every session (~2.5K tokens):**
+- `CLAUDE.md` -- 5 priority rules + @import of sisyphus-baseline
+- `rules/sisyphus-baseline.md` -- behavioral baseline (121 lines)
+- `rules/anti-slop.md` -- style enforcement (12 lines)
+- Language rules only when working with matching files (paths: scoped)
+
+**Loads on demand (zero cost until invoked):**
+- All 13 agents -- read only when delegated to via Agent()
+- MCP tools -- lazy-loaded via ENABLE_TOOL_SEARCH
+- Skills -- loaded only when slash command is invoked
+
+**Available but not active until you opt in:**
+- Agent Teams -- env var enables the feature; teammates only exist when you create them
+- Coordinator -- runs only via `claude --agent coordinator`
+- Planner -- runs only via `claude --agent planner`
+- Boulder state -- only active when a plan is in progress
+
+**Fires automatically on registered events:**
+- PreToolUse hooks: comment-checker (Edit|Write), write-guard (Write), destructive blocker (Bash)
+- PostToolUse hooks: run-tests-async (Edit|Write), edit-recovery (Edit)
+- Session lifecycle: session-start, post-compact, notify-idle, Stop verifier
+- Agent lifecycle: subagent-stop, teammate-idle, task-completed
+
+**The default session** (no flags, no commands) gives you: sisyphus baseline + anti-slop + hooks. Direct coding mode. Everything else is opt-in.
+
+---
+
 ## Daily Workflows
 
 ### Starting a new task or feature
