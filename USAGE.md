@@ -373,11 +373,10 @@ claude --agent reviewer
 ~/.claude/
   USAGE.md                    # This file
   settings.json               # Hooks, permissions, env vars
-  sisyphus-baseline.md        # Always-on behavioral rules for every session
   boulder.json                # Active plan state (created by /start-work)
   handoff.md                  # Session handoff notes (created by /handoff)
 
-  agents/                     # Agent prompt files
+  agents/                     # Agent prompt files (13 agents)
     coordinator.md
     worker.md
     forge.md
@@ -388,6 +387,9 @@ claude --agent reviewer
     reviewer.md
     verifier.md
     gap-analyzer.md
+    explore.md
+    codex-deep.md
+    gemini-ui.md
 
   skills/                     # Slash command implementations
     start-work/SKILL.md
@@ -398,6 +400,9 @@ claude --agent reviewer
     refactor/SKILL.md
     ralph-loop/SKILL.md
     ultrawork/SKILL.md
+    dev-browser/SKILL.md
+    frontend-ui-ux/SKILL.md
+    init-deep/SKILL.md
 
   hooks/                      # Shell scripts that fire on events
     session-start.sh
@@ -412,10 +417,23 @@ claude --agent reviewer
     notify-idle.sh
     edit-recovery.sh
 
+  rules/                      # Behavioral rules loaded at startup
+    sisyphus-baseline.md      # Always-on baseline for every session
+    anti-slop.md
+    swift.md
+    tests.md
+    typescript.md
+
+  output-styles/              # Response format presets
+    concise.md
+
+  scripts/                    # Helper scripts for MCP agents
+    ask-gpt.sh
+    ask-gemini.sh
+
   plans/                      # Generated plans (created by planner)
   notepads/                   # Accumulated wisdom per plan (created by coordinator)
   drafts/                     # Working notes during planning (deleted after plan)
-  rules/                      # Additional rule files loaded at startup
 ```
 
 ---
@@ -427,4 +445,45 @@ claude --agent reviewer
 - Plans live in `.claude/plans/`. Wisdom from past runs accumulates in `.claude/notepads/{plan-name}/`.
 - Agent Teams is enabled, so the coordinator can run parallel teammates for independent work within a wave.
 - The coordinator is the right choice for plans with 5+ tasks. For 1-4 tasks, `/start-work` is sufficient.
-- `forge` is not the default — it's the specialist for genuinely hard autonomous work. Don't route everything there.
+- `forge` is not the default -- it's the specialist for genuinely hard autonomous work. Don't route everything there.
+- Use `--output-style concise` for ultra-concise responses (lead with action, skip preamble, bullets over paragraphs).
+
+---
+
+## MCP-Dependent Agents
+
+Two agents (`codex-deep` and `gemini-ui`) query external models via a **modelhub MCP server**. They work without it (they report the error and provide their own analysis), but you get better results with the MCP server running.
+
+### Requirements
+
+| Agent | External Model | Required Env Var |
+|---|---|---|
+| codex-deep | GPT/Codex (OpenAI) | `OPENAI_API_KEY` |
+| gemini-ui | Gemini (Google) | `GOOGLE_API_KEY` |
+
+### MCP Server Setup
+
+The MCP server must be available at `~/.claude/tools/model-hub-mcp.js`. Both agents declare it in their frontmatter:
+
+```yaml
+mcpServers:
+  - modelhub:
+      type: stdio
+      command: node
+      args: ["~/.claude/tools/model-hub-mcp.js"]
+      env:
+        OPENAI_API_KEY: "${OPENAI_API_KEY}"
+        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
+```
+
+### Where to get the MCP server
+
+The model-hub MCP server is not yet open-sourced. It will be published alongside a future OmO release. In the meantime, these agents gracefully degrade: if the MCP server isn't available, they fall back to analysis using only their built-in tools (Read, Glob, Grep) and report that the external model was unavailable.
+
+### Graceful Degradation
+
+If MCP is unavailable or the API key is missing:
+- The agent logs the connection error
+- Falls back to codebase analysis with built-in tools
+- Returns its own assessment with a note that the external model wasn't consulted
+- The coordinator or caller can still act on the analysis

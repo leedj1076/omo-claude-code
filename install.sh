@@ -137,9 +137,17 @@ if [ -d "$SCRIPT_DIR/scripts" ]; then
   fi
 fi
 
+# --- API key warnings ---
+
+if [ -z "${OPENAI_API_KEY:-}" ]; then
+  warn "OPENAI_API_KEY not set - scripts/ask-gpt.sh and agents/codex-deep.md won't work without it"
+fi
+if [ -z "${GOOGLE_API_KEY:-}" ]; then
+  warn "GOOGLE_API_KEY not set - scripts/ask-gemini.sh and agents/gemini-ui.md won't work without it"
+fi
+
 # --- Copy core files ---
 
-copy_file "$SCRIPT_DIR/sisyphus-baseline.md" "$TARGET/sisyphus-baseline.md"
 copy_file "$SCRIPT_DIR/statusline-command.sh" "$TARGET/statusline-command.sh"
 copy_file "$SCRIPT_DIR/USAGE.md" "$TARGET/USAGE.md"
 
@@ -157,7 +165,7 @@ if [ -f "$TARGET/CLAUDE.md" ]; then
     log "CLAUDE.md exists with custom content - appending reference"
     if [ "$DRY_RUN" = false ]; then
       echo "" >> "$TARGET/CLAUDE.md"
-      echo "@~/.claude/sisyphus-baseline.md" >> "$TARGET/CLAUDE.md"
+      echo "@~/.claude/rules/sisyphus-baseline.md" >> "$TARGET/CLAUDE.md"
     fi
   fi
 else
@@ -171,17 +179,40 @@ if [ -f "$TARGET/settings.json" ]; then
   if [ "$DRY_RUN" = false ]; then
     backup_file "$TARGET/settings.json"
 
-    # Deep merge: OmO settings take priority for hooks/env,
-    # but preserve user's existing permissions, plugins, and other settings
+    # Deep merge: OmO settings take priority for env/statusLine/thinking/effort,
+    # hooks are merged per event (concatenate arrays, deduplicate by command),
+    # permissions are combined and deduplicated
     MERGED=$(jq -s '
       # $existing = .[0], $omo = .[1]
       .[0] as $existing | .[1] as $omo |
 
+      # Helper: merge two hook arrays, dedup by .hooks[].command
+      def merge_hook_arrays:
+        (.[0] // []) as $a | (.[1] // []) as $b |
+        ($a + $b) | [foreach .[] as $item (
+          {};
+          . as $seen |
+          ($item.hooks // [] | map(.command // .prompt // "") | join("|")) as $key |
+          if $seen[$key] then . else . + {($key): true} end;
+          ($item.hooks // [] | map(.command // .prompt // "") | join("|")) as $key |
+          if $seen[$key] == true then empty else $item end
+        )] // ($a + $b | unique_by(.hooks));
+
       # Start with existing settings
       $existing
 
-      # Overwrite hooks entirely (OmO hooks are the full set)
-      | .hooks = $omo.hooks
+      # Merge hooks per event key (combine arrays, deduplicate by command)
+      | .hooks = (
+          (($existing.hooks // {}) | keys) + (($omo.hooks // {}) | keys) | unique |
+          map(. as $event | {
+            ($event): [
+              (($existing.hooks[$event] // []) + ($omo.hooks[$event] // [])) |
+              .[] |
+              . as $entry |
+              $entry
+            ] | unique_by(.hooks | map(.command // .prompt // "") | join("|"))
+          }) | add // {}
+        )
 
       # Merge permissions (combine allow/deny arrays, deduplicate)
       | .permissions.allow = (($existing.permissions.allow // []) + ($omo.permissions.allow // []) | unique)
