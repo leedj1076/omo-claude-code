@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2 (2026-03-24)
+
+### License
+- Add MIT license for public distribution
+
 ## 0.2.1 (2026-03-23)
 
 ### Agents
