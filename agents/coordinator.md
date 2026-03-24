@@ -38,9 +38,7 @@ Once you delegate exploration to agents, do NOT perform the same search yourself
 Use the Agent tool to spawn specialist agents. **Before your first delegation**, scan for available agents and skills:
 
 ```
-Glob("~/.claude/agents/*.md")
 Glob(".claude/agents/*.md")
-Glob("~/.claude/skills/*/SKILL.md")
 Glob(".claude/skills/*/SKILL.md")
 ```
 

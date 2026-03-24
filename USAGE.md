@@ -249,7 +249,7 @@ Next time the coordinator delegates `todo:3`, it reads this entry and sends `Sen
 
 CC fires `TeammateIdle` with the teammate's name, team name, session ID, and transcript path. The hook resolves which plan task the teammate owns using this priority order:
 
-1. **Native team task list** — reads `~/.claude/tasks/{team_name}/*.json`, finds the task assigned to this teammate, parses the `task_subject` prefix (`todo:2 | ...`) to get the task key. This is the preferred source because it's authoritative.
+1. **Native team task list** — reads `.claude/tasks/{team_name}/*.json`, finds the task assigned to this teammate, parses the `task_subject` prefix (`todo:2 | ...`) to get the task key. This is the preferred source because it's authoritative.
 2. **Prior boulder entry** — if this session ID already has an entry in `teammate_sessions`, reuses its recorded `task_key`
 3. **Transcript** — reads the first 5 lines of the teammate's transcript for a `TASK_KEY:` line
 4. **Current task fallback** — uses `current_task.key` from boulder state (only safe for sequential single-teammate execution)
@@ -401,7 +401,7 @@ claude --agent reviewer
 ## File Structure
 
 ```
-~/.claude/
+.claude/
   USAGE.md                    # This file
   settings.json               # Hooks, permissions, env vars
   boulder.json                # Active plan state (created by /start-work)
@@ -494,14 +494,14 @@ Two agents (`codex-deep` and `gemini-ui`) query external models via a **modelhub
 
 ### MCP Server Setup
 
-The MCP server must be available at `~/.claude/tools/model-hub-mcp.js`. Both agents declare it in their frontmatter:
+The MCP server must be available at `.claude/tools/model-hub-mcp.js`. Both agents declare it in their frontmatter:
 
 ```yaml
 mcpServers:
   - modelhub:
       type: stdio
       command: node
-      args: ["~/.claude/tools/model-hub-mcp.js"]
+      args: [".claude/tools/model-hub-mcp.js"]
       env:
         OPENAI_API_KEY: "${OPENAI_API_KEY}"
         GOOGLE_API_KEY: "${GOOGLE_API_KEY}"

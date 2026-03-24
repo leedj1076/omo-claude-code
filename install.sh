@@ -1,6 +1,6 @@
 #!/bin/bash
 # OmO Claude Code Setup - Installation Script
-# Installs the OmO agent framework into ~/.claude/
+# Installs the OmO agent framework into .claude/
 #
 # Usage: bash install.sh [--dry-run] [--force]
 #   --dry-run  Show what would be done without making changes
@@ -9,7 +9,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TARGET="$HOME/.claude"
+TARGET=".claude"
 DRY_RUN=false
 FORCE=false
 BACKED_UP=()
@@ -78,6 +78,14 @@ if ! command -v claude &>/dev/null; then
   warn "Claude Code CLI not found. Install it first:"
   echo "  npm install -g @anthropic-ai/claude-code"
   exit 1
+fi
+
+# Warn if we don't appear to be in a project root
+if [ ! -d ".git" ] && [ ! -f "package.json" ] && [ ! -f "Cargo.toml" ] && [ ! -f "go.mod" ] && [ ! -f "Makefile" ]; then
+  warn "No .git/, package.json, Cargo.toml, go.mod, or Makefile found in $(pwd)"
+  warn "This doesn't look like a project root. OmO installs into .claude/ relative to the current directory."
+  warn "If this is intentional, press Ctrl-C within 5s to abort, or wait to continue."
+  sleep 5
 fi
 
 log "Installing OmO Claude Code setup..."
@@ -183,7 +191,7 @@ if [ -f "$TARGET/CLAUDE.md" ]; then
     log "CLAUDE.md exists with custom content - appending reference"
     if [ "$DRY_RUN" = false ]; then
       echo "" >> "$TARGET/CLAUDE.md"
-      echo "@~/.claude/rules/sisyphus-baseline.md" >> "$TARGET/CLAUDE.md"
+      echo "@.claude/rules/sisyphus-baseline.md" >> "$TARGET/CLAUDE.md"
     fi
   fi
 else
@@ -289,7 +297,7 @@ echo "  claude --agent planner    # Plan a new feature"
 echo "  claude --agent coordinator # Execute a plan"
 echo "  /delegate fix the bug in auth.ts  # Delegate a task"
 echo ""
-log "Read ~/.claude/USAGE.md for the full guide."
+log "Read .claude/USAGE.md for the full guide."
 
 if [ ${#BACKED_UP[@]} -gt 0 ]; then
   echo ""

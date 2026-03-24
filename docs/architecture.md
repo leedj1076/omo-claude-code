@@ -73,7 +73,7 @@ Activate with `--output-style concise` when launching a session.
 
 ### Adding a new agent
 
-Create `~/.claude/agents/name.md` with YAML frontmatter:
+Create `.claude/agents/name.md` with YAML frontmatter:
 
 ```yaml
 ---
@@ -89,8 +89,8 @@ Agent instructions here.
 
 ### Adding a new hook
 
-1. Create the script in `~/.claude/hooks/my-hook.sh`
-2. Make it executable: `chmod +x ~/.claude/hooks/my-hook.sh`
+1. Create the script in `.claude/hooks/my-hook.sh`
+2. Make it executable: `chmod +x .claude/hooks/my-hook.sh`
 3. Register in `settings.json` under the appropriate event:
 
 ```json
@@ -99,7 +99,7 @@ Agent instructions here.
     "PreToolUse": [
       {
         "matcher": "Edit|Write",
-        "hooks": [{ "type": "command", "command": "~/.claude/hooks/my-hook.sh" }]
+        "hooks": [{ "type": "command", "command": ".claude/hooks/my-hook.sh" }]
       }
     ]
   }
@@ -111,7 +111,7 @@ stdin receives JSON with tool input. stderr output is shown to the model.
 
 ### Adding a new rule
 
-Create `~/.claude/rules/name.md` with optional path scoping:
+Create `.claude/rules/name.md` with optional path scoping:
 
 ```yaml
 ---
@@ -125,4 +125,4 @@ Rules without `paths:` frontmatter apply globally.
 
 ### Modifying the baseline
 
-Edit `~/.claude/rules/sisyphus-baseline.md`. This file is loaded via `@` import in CLAUDE.md and applies to every session. Changes take effect on next session start.
+Edit `.claude/rules/sisyphus-baseline.md`. This file is loaded via `@` import in CLAUDE.md and applies to every session. Changes take effect on next session start.

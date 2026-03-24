@@ -2,14 +2,14 @@
 
 ## For Humans
 
-Paste this one-liner into a Claude Code session:
+Open a Claude Code session **in the project you want to add OmO to**, then paste:
 
 ```
 Install and configure omo-claude-code by following the instructions here:
 https://raw.githubusercontent.com/leedj1076/omo-claude-code/refs/heads/master/docs/installation.md
 ```
 
-That's it. Claude reads this guide, downloads everything, and sets it up for you.
+That's it. Claude reads this guide, downloads everything, and sets it up in your project's `.claude/` directory. Repeat for each project you want OmO in.
 
 ---
 
@@ -22,6 +22,8 @@ That's it. Claude reads this guide, downloads everything, and sets it up for you
 > ```
 
 You're installing omo-claude-code, an agent orchestration framework for Claude Code. It adds 13 specialized agents, 11 slash-command skills, 11 lifecycle hooks, behavioral rules, plan-based work tracking, and Agent Teams support.
+
+**This is a repo-local install.** Everything goes into `.claude/` relative to the current working directory. Make sure you're in the project root before proceeding.
 
 Follow these steps in order.
 
@@ -69,7 +71,7 @@ bash "$SRC/install.sh"
 ```
 
 The installer handles:
-- Copying all agents, skills, hooks, rules, scripts, and output styles to `~/.claude/`
+- Copying all agents, skills, hooks, rules, scripts, and output styles to `.claude/`
 - Making hooks and scripts executable
 - Smart CLAUDE.md handling (creates or appends, never overwrites custom content)
 - Smart settings.json merging (replaces hooks, combines permissions, merges env vars, preserves user's plugins and other settings)
@@ -85,28 +87,28 @@ Run all of these checks:
 
 ```bash
 # Count agents (expect 13)
-echo "Agents: $(ls ~/.claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ')"
+echo "Agents: $(ls .claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ')"
 
 # Count skills (expect 11)
-echo "Skills: $(ls ~/.claude/skills/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')"
+echo "Skills: $(ls .claude/skills/*/SKILL.md 2>/dev/null | wc -l | tr -d ' ')"
 
 # Count hooks (expect 11)
-echo "Hooks: $(ls ~/.claude/hooks/*.sh 2>/dev/null | wc -l | tr -d ' ')"
+echo "Hooks: $(ls .claude/hooks/*.sh 2>/dev/null | wc -l | tr -d ' ')"
 
 # Non-executable hooks (expect empty)
-echo "Non-executable hooks: $(find ~/.claude/hooks -name '*.sh' ! -perm -u+x 2>/dev/null)"
+echo "Non-executable hooks: $(find .claude/hooks -name '*.sh' ! -perm -u+x 2>/dev/null)"
 
 # Agent Teams env var (expect "1")
-echo "Agent Teams: $(jq -r '.env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS // "NOT SET"' ~/.claude/settings.json 2>/dev/null)"
+echo "Agent Teams: $(jq -r '.env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS // "NOT SET"' .claude/settings.json 2>/dev/null)"
 
 # Hooks registered (expect 10 event types)
-echo "Hook events: $(jq '.hooks | keys | length' ~/.claude/settings.json 2>/dev/null)"
+echo "Hook events: $(jq '.hooks | keys | length' .claude/settings.json 2>/dev/null)"
 
 # CLAUDE.md references baseline
-echo "Baseline ref: $(grep -c 'sisyphus-baseline' ~/.claude/CLAUDE.md 2>/dev/null) (expect >= 1)"
+echo "Baseline ref: $(grep -c 'sisyphus-baseline' .claude/CLAUDE.md 2>/dev/null) (expect >= 1)"
 
 # Status line exists
-echo "Status line: $(test -x ~/.claude/statusline-command.sh && echo 'OK' || echo 'MISSING')"
+echo "Status line: $(test -x .claude/statusline-command.sh && echo 'OK' || echo 'MISSING')"
 ```
 
 Expected results:
@@ -137,10 +139,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
   echo "Non-macOS detected. Two hooks need adjustment:"
   echo ""
-  echo "1. ~/.claude/hooks/notify-idle.sh uses osascript (macOS only)"
+  echo "1. .claude/hooks/notify-idle.sh uses osascript (macOS only)"
   echo "   Fix: Replace osascript line with: notify-send 'Claude Code' 'Waiting for input'"
   echo ""
-  echo "2. ~/.claude/hooks/run-tests-async.sh uses stat -f %m (macOS)"
+  echo "2. .claude/hooks/run-tests-async.sh uses stat -f %m (macOS)"
   echo "   Fix: Change 'stat -f %m' to 'stat -c %Y'"
 fi
 ```
@@ -178,7 +180,7 @@ claude --agent coordinator   # Execute a plan (delegates, verifies, tracks progr
 5. Stop hook pushes back if they try to end a session with incomplete plan tasks
 6. Including "ultrawork" or "ulw" in a prompt activates autonomous mode
 
-Tell the user to read `~/.claude/USAGE.md` for the full guide on all features, delegation categories, and the Agent Teams system.
+Tell the user to read `.claude/USAGE.md` for the full guide on all features, delegation categories, and the Agent Teams system.
 
 ### Step 7: Quick test
 
@@ -212,14 +214,14 @@ These are local/session state. Never copy them from someone else's setup:
 
 If the user just wants the behavioral improvements without the full agent/skill system, install only:
 
-1. `sisyphus-baseline.md` -> `~/.claude/sisyphus-baseline.md`
-2. `rules/anti-slop.md` -> `~/.claude/rules/anti-slop.md`
-3. `CLAUDE.md` -> `~/.claude/CLAUDE.md` (contains `@~/.claude/sisyphus-baseline.md`)
+1. `sisyphus-baseline.md` -> `.claude/sisyphus-baseline.md`
+2. `rules/anti-slop.md` -> `.claude/rules/anti-slop.md`
+3. `CLAUDE.md` -> `.claude/CLAUDE.md` (contains `@.claude/sisyphus-baseline.md`)
 4. These hooks (make executable):
-   - `hooks/comment-checker.sh` -> `~/.claude/hooks/comment-checker.sh`
-   - `hooks/write-guard.sh` -> `~/.claude/hooks/write-guard.sh`
-   - `hooks/edit-recovery.sh` -> `~/.claude/hooks/edit-recovery.sh`
-   - `hooks/session-start.sh` -> `~/.claude/hooks/session-start.sh`
-5. Register the hooks in `~/.claude/settings.json`
+   - `hooks/comment-checker.sh` -> `.claude/hooks/comment-checker.sh`
+   - `hooks/write-guard.sh` -> `.claude/hooks/write-guard.sh`
+   - `hooks/edit-recovery.sh` -> `.claude/hooks/edit-recovery.sh`
+   - `hooks/session-start.sh` -> `.claude/hooks/session-start.sh`
+5. Register the hooks in `.claude/settings.json`
 
 This gives: intent classification, evidence standards, anti-slop enforcement, edit safety, and git context injection. No agents, no skills, no plans.

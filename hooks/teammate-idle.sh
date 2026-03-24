@@ -12,7 +12,7 @@ SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // ""' 2>/dev/null)
 TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // ""' 2>/dev/null)
 
 BOULDER=".claude/boulder.json"
-TASKS_ROOT="${CLAUDE_TASKS_ROOT:-$HOME/.claude/tasks}"
+TASKS_ROOT="${CLAUDE_TASKS_ROOT:-.claude/tasks}"
 
 if [ ! -f "$BOULDER" ]; then exit 0; fi
 STATUS=$(jq -r '.status // ""' "$BOULDER" 2>/dev/null)

@@ -5,4 +5,4 @@
 - After 3 failures: stop, revert, consult oracle, ask user.
 - For 2+ file tasks, prefer delegation to specialist agents.
 
-@~/.claude/rules/sisyphus-baseline.md
+@.claude/rules/sisyphus-baseline.md

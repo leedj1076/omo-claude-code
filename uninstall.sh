@@ -1,12 +1,12 @@
 #!/bin/bash
 # OmO Claude Code - Uninstall Script
-# Removes OmO-installed files from ~/.claude/
+# Removes OmO-installed files from .claude/
 #
 # Usage: bash uninstall.sh [--dry-run]
 
 set -euo pipefail
 
-TARGET="$HOME/.claude"
+TARGET=".claude"
 DRY_RUN=false
 
 for arg in "$@"; do
@@ -87,8 +87,8 @@ echo ""
 log "=== Uninstall complete ==="
 echo ""
 log "Preserved (contain user data):"
-echo "  - ~/.claude/CLAUDE.md (remove @sisyphus-baseline reference manually)"
-echo "  - ~/.claude/settings.json (remove OmO hooks manually)"
-echo "  - ~/.claude/plans/"
-echo "  - ~/.claude/notepads/"
-echo "  - ~/.claude/memory/"
+echo "  - .claude/CLAUDE.md (remove @sisyphus-baseline reference manually)"
+echo "  - .claude/settings.json (remove OmO hooks manually)"
+echo "  - .claude/plans/"
+echo "  - .claude/notepads/"
+echo "  - .claude/memory/"

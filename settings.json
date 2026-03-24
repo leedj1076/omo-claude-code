@@ -2,8 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(ast-grep *)",
-      "Bash(~/.claude/scripts/*)",
-      "Bash(~/.claude/hooks/*)"
+      "Bash(.claude/scripts/*)",
+      "Bash(.claude/hooks/*)"
     ],
     "deny": [
       "Read(./.env)",
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/ultrawork-detector.sh"
+            "command": ".claude/hooks/ultrawork-detector.sh"
           }
         ]
       },
@@ -36,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/run-tests-async.sh",
+            "command": ".claude/hooks/run-tests-async.sh",
             "timeout": 300,
             "async": true
           }
@@ -47,7 +47,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/edit-recovery.sh"
+            "command": ".claude/hooks/edit-recovery.sh"
           }
         ]
       }
@@ -68,7 +68,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/session-start.sh"
+            "command": ".claude/hooks/session-start.sh"
           }
         ]
       }
@@ -78,7 +78,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/post-compact.sh"
+            "command": ".claude/hooks/post-compact.sh"
           }
         ]
       }
@@ -89,7 +89,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/comment-checker.sh"
+            "command": ".claude/hooks/comment-checker.sh"
           }
         ]
       },
@@ -98,7 +98,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/write-guard.sh"
+            "command": ".claude/hooks/write-guard.sh"
           }
         ]
       },
@@ -118,7 +118,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/edit-recovery.sh"
+            "command": ".claude/hooks/edit-recovery.sh"
           }
         ]
       }
@@ -129,7 +129,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/notify-idle.sh"
+            "command": ".claude/hooks/notify-idle.sh"
           }
         ]
       }
@@ -139,7 +139,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/subagent-stop.sh"
+            "command": ".claude/hooks/subagent-stop.sh"
           }
         ]
       }
@@ -149,7 +149,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/teammate-idle.sh"
+            "command": ".claude/hooks/teammate-idle.sh"
           }
         ]
       }
@@ -159,7 +159,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/task-completed.sh"
+            "command": ".claude/hooks/task-completed.sh"
           }
         ]
       }
@@ -167,7 +167,7 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
+    "command": "bash .claude/statusline-command.sh"
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",

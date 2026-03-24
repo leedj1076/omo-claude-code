@@ -59,7 +59,7 @@ Map the surface request to the true intent before routing:
 > Deep reasoning mode. BEFORE writing ANY code, SEARCH the existing codebase to find similar patterns/styles. Bias toward simplicity. One clear recommendation with effort estimate (Quick/Short/Medium/Large). Response format: bottom line (2-3 sentences), action plan (numbered steps), risks and mitigations.
 
 **writing**:
-> Apply ~/.claude/rules/anti-slop.md rules (NON-NEGOTIABLE). No em dashes. Banned word list is in that file. Use contractions naturally. Vary sentence length. No consecutive sentences starting with the same word. No filler openings. Write like a human.
+> Apply .claude/rules/anti-slop.md rules (NON-NEGOTIABLE). No em dashes. Banned word list is in that file. Use contractions naturally. Vary sentence length. No consecutive sentences starting with the same word. No filler openings. Write like a human.
 
 **artistry**:
 > Push far beyond conventional boundaries. Explore radical, unconventional directions. Surprise and delight. Rich detail and vivid expression. Break patterns deliberately when it serves the creative vision. Balance novelty with coherence.
